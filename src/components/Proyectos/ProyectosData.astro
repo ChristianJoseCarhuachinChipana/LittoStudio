@@ -1,0 +1,12 @@
+---
+const { value, description } = Astro.props;
+---
+
+<div class="w-full flex justify-between">
+	<div class="w-4/9">
+		<p class="text-5xl tracking-[.25em]">{value}</p>
+	</div>
+	<div class="w-5/9">
+		<p class="text-xl tracking-[.25em]">{description}</p>
+	</div>
+</div>

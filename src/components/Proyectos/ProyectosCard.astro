@@ -1,0 +1,10 @@
+---
+const { title, img, alt } = Astro.props;
+---
+
+<div class="w-88">
+	<div class="w-full h-43 rounded-3xl overflow-hidden">
+		<img src={img} alt={alt} class="w-full h-full object-cover" />
+	</div>
+	<h3 class="text-center text-lg tracking-[.25em]">{title}</h3>
+</div>

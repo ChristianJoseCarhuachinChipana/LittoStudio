@@ -1,0 +1,158 @@
+---
+import ProyectosCard from './ProyectosCard.astro';
+import ProyectosData from './ProyectosData.astro';
+
+const proyectos = [
+	{
+		title: 'Belalba',
+		img: 'src/assets/proyectos/belalba.png',
+		alt: 'Proyecto Belalba',
+	},
+	{
+		title: 'Borgoño',
+		img: 'src/assets/proyectos/borgono.jpg',
+		alt: 'Proyecto Borgoño',
+	},
+	{
+		title: 'Cada DR',
+		img: 'src/assets/proyectos/casa_dr.png',
+		alt: 'Proyecto Cada DR',
+	},
+	{
+		title: 'Cannelle',
+		img: 'src/assets/proyectos/cannelle.png',
+		alt: 'Proyecto Cannelle',
+	},
+	{ title: 'Nox', img: 'src/assets/proyectos/nox.jpg', alt: 'Proyecto Nox' },
+	{
+		title: 'Park Living',
+		img: 'src/assets/proyectos/park_living.jpg',
+		alt: 'Proyecto Park Living',
+	},
+];
+
+const proyectosData = [
+	{
+		value: '+25',
+		description: 'Proyectos desarrollados',
+	},
+	{
+		value: '45%',
+		description: 'Residencial',
+	},
+	{
+		value: '55%',
+		description: 'Inmobiliarios',
+	},
+];
+---
+
+<section
+	id="proyectos-section"
+	class="bg-background-light flex items-center justify-center"
+>
+	<div class="py-14 px-10 w-full max-w-7xl flex">
+		<div class="w-3/5 relative">
+			<div class="flex flex-wrap justify-between gap-y-3">
+				{proyectos.map((proyecto) => (
+					<ProyectosCard
+						title={proyecto.title}
+						img={proyecto.img}
+						alt={proyecto.alt}
+					/>
+				))}
+			</div>
+			<div id="mask" class="absolute size-full bottom-0"></div>
+		</div>
+		<div class="w-2/5 pl-[6%] flex flex-col">
+			<div class="my-5">
+				<h2 id="proyectos-title" class="text-5xl font-bold text-textColor mb-5">
+					Proyectos
+				</h2>
+				<div id="proyectos-text" class="text-lg/5 tracking-[.25em]">
+					<p>
+						Una muestra de proyectos donde el diseño aporta valor, identidad y
+						propósito a cada espacio.
+					</p>
+				</div>
+			</div>
+			<div id="proyectos-data" class="w-full flex flex-col mx-5 my-20 gap-y-10">
+				{proyectosData.map((data) => (
+					<ProyectosData value={data.value} description={data.description} />
+				))}
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { gsap } from 'gsap';
+
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	const proyectosSection = document.querySelector('#proyectos-section');
+	const mask = document.querySelector('#mask');
+	const bgLight = getComputedStyle(proyectosSection).backgroundColor;
+
+	gsap.fromTo(
+		mask,
+		{
+			height: '100%',
+			backgroundImage: `linear-gradient(to top, ${bgLight} 100%, transparent)`,
+		},
+		{
+			height: '0%',
+			backgroundImage: `linear-gradient(to top, ${bgLight} 0%, transparent)`,
+			duration: 5,
+			ease: 'power3.out',
+			scrollTrigger: {
+				trigger: proyectosSection,
+				start: 'top center',
+			},
+		},
+	);
+
+	const proyectosText = document.querySelector('#proyectos-text');
+	const proyectosTitle = document.querySelector('#proyectos-title');
+	const proyectosData = document.querySelector('#proyectos-data');
+
+	const tl = gsap.timeline({
+		scrollTrigger: {
+			trigger: proyectosSection,
+			start: 'top center',
+			end: 'bottom top',
+			scrub: false,
+		},
+	});
+
+	tl.from(proyectosTitle, {
+		opacity: 0,
+		scale: 1.5,
+		duration: 3,
+		ease: 'power3.out',
+	});
+
+	tl.from(
+		proyectosText,
+		{
+			opacity: 0,
+			x: '10%',
+			duration: 3,
+			ease: 'power3.out',
+		},
+		'-=1.5',
+	);
+
+	tl.from(
+		proyectosData,
+		{
+			opacity: 0,
+			scale: 0.5,
+			duration: 3,
+			ease: 'power3.out',
+		},
+		'-=2.5',
+	);
+</script>
