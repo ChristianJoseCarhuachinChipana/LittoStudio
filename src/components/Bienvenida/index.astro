@@ -1,14 +1,27 @@
 ---
 import HeroImg from '@/assets/hero.png';
+import HeroVideo from '@/assets/hero.mp4';
 ---
 
-<section class="relative">
-	<div class="w-full overflow-hidden h-190">
-		<div class="w-full h-full flex items-center justify-center">
-			<img id="hero-img" src={HeroImg.src} alt="Hero" class="w-full" />
-		</div>
+<section class="relative h-dvh">
+	<div class="w-full h-full overflow-hidden relative">
+		<img
+			id="hero-fallback"
+			src={HeroImg.src}
+			alt="Hero"
+			class="absolute inset-0 w-full h-full object-cover"
+		/>
+		<video
+			id="hero-video"
+			src={HeroVideo}
+			autoplay
+			muted
+			playsinline
+			preload="auto"
+			class="absolute inset-0 w-full h-full object-cover"
+		></video>
 	</div>
-	<div class="w-full max-w-7xl px-10 h-190 absolute z-2 top-0 inset-x-0 mx-auto">
+	<div class="w-full max-w-7xl px-10 h-full absolute z-2 top-0 inset-x-0 mx-auto">
 		<div id="logo" class="absolute top-9/30 left-1/11">
 			<div class="relative">
 				<p class="text-9xl font-bold tracking-tight text-primary">Litto</p>
@@ -46,58 +59,89 @@ import HeroImg from '@/assets/hero.png';
 <script>
 	import { gsap } from 'gsap';
 
-	console.log('Script cargado'); // debug
-	const tl = gsap.timeline();
-
-	window.addEventListener('load', () => {
-		const heroImg = document.querySelector('#hero-img');
+	const init = () => {
+		const heroVideo = document.querySelector<HTMLVideoElement>('#hero-video');
 		const texto1 = document.querySelector('#texto1');
 		const texto2 = document.querySelector('#texto2');
 		const contactanos = document.querySelector('#contactanos');
 		const logo = document.querySelector('#logo');
 
-		tl.fromTo(
-			heroImg,
-			{ filter: 'blur(8px)', scale: 1.5, x: '2.5%', y: '-3%', opacity: 0.7 },
-			{
-				filter: 'blur(0px)',
-				scale: 1.12,
-				x: '2.5%',
-				y: '-3%',
-				opacity: 1,
-				duration: 3.5,
-				ease: 'power3.out',
-			},
-		);
-		tl.fromTo(
-			texto1,
-			{ opacity: 0, y: '50%' },
-			{ opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
-			'-=2.5',
-		);
-		tl.fromTo(
-			texto2,
-			{ opacity: 0, y: '50%' },
-			{ opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
-			'-=1.5',
-		);
-		tl.fromTo(
-			contactanos,
-			{ opacity: 0, y: '50%' },
-			{ opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
-			'-=1',
-		);
-		tl.fromTo(
-			logo,
-			{ scale: 1.5, x: '2.5%', opacity: 0 },
-			{
-				scale: 1,
-				x: '2.5%',
-				opacity: 1,
-				duration: 2.5,
-				ease: 'power4.out',
-			},
-			'-=1.5',
-		);
-	});
+		let mostrado = false;
+		const mostrar = () => {
+			if (mostrado) return;
+			mostrado = true;
+
+			const tl = gsap.timeline();
+
+			tl.fromTo(
+				texto1,
+				{ opacity: 0, y: '50%' },
+				{ opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
+			);
+			tl.fromTo(
+				texto2,
+				{ opacity: 0, y: '50%' },
+				{ opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
+				'-=1.5',
+			);
+			tl.fromTo(
+				contactanos,
+				{ opacity: 0, y: '50%' },
+				{ opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
+				'-=1',
+			);
+			tl.fromTo(
+				logo,
+				{ scale: 1.5, x: '2.5%', opacity: 0 },
+				{
+					scale: 1,
+					x: '2.5%',
+					opacity: 1,
+					duration: 2.5,
+					ease: 'power4.out',
+				},
+				'-=1.5',
+			);
+		};
+
+		gsap.set([logo, texto1, texto2, contactanos], { opacity: 0 });
+
+		if (!heroVideo) {
+			mostrar();
+			return;
+		}
+
+		const falla = () => {
+			heroVideo.style.display = 'none';
+			mostrar();
+		};
+
+		const superponer = () => {
+			gsap.to(heroVideo, {
+				opacity: 0,
+				duration: 1,
+				ease: 'power2.out',
+				onComplete: () => {
+					heroVideo.style.display = 'none';
+				},
+			});
+		};
+
+		heroVideo.addEventListener('ended', () => {
+			superponer();
+			mostrar();
+		});
+		heroVideo.addEventListener('error', falla);
+
+		if (heroVideo.error) {
+			falla();
+			return;
+		}
+
+		heroVideo.play().catch(falla);
+
+		window.setTimeout(mostrar, 12000);
+	};
+
+	init();
 </script>
