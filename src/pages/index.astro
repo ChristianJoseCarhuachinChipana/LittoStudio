@@ -2,6 +2,7 @@
 import Bienvenida from '@/components/Bienvenida/index.astro';
 import Nosotros from '@/components/Nosotros/index.astro';
 import Proyectos from '@/components/Proyectos/index.astro';
+import ImagenSection from '@/components/ImagenSection/index.astro';
 import Layout from '@/layouts/Layout.astro';
 import '@/styles/global.css';
 
@@ -13,5 +14,9 @@ import '@/styles/global.css';
 	<Bienvenida />
 	<Nosotros />
 	<Proyectos />
+	<ImagenSection
+		img="src/assets/imgSection/img_section1.png"
+		alt="Proyecto 1"
+	/>
 	<div class="w-full h-500 bg-gray-200"></div>
 </Layout>
