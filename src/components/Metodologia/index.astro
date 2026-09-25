@@ -1,0 +1,305 @@
+---
+import metodologiaImagen from '@/assets/metodologia.png';
+
+interface MethodologyImage {
+	src: string;
+	width: number;
+	height: number;
+}
+
+interface MethodologyStep {
+	number: string;
+	title: string;
+	description: string;
+}
+
+const methodologyImage: MethodologyImage = metodologiaImagen;
+const methodologyAlt =
+	'Profesional acomodando una almohada en un dormitorio residencial durante la etapa de estilismo';
+
+const steps: MethodologyStep[] = [
+	{
+		number: '01',
+		title: 'Diagnóstico',
+		description: 'Conocemos el espacio y definimos los objetivos del proyecto.',
+	},
+	{
+		number: '02',
+		title: 'Diseño',
+		description:
+			'Definimos la propuesta, distribución e identidad del espacio.',
+	},
+	{
+		number: '03',
+		title: 'Desarrollo',
+		description:
+			'Elaboramos la documentación técnica para la ejecución del proyecto.',
+	},
+	{
+		number: '04',
+		title: 'Materializamos',
+		description: 'Acompañamos la ejecución para asegurar cada detalle.',
+	},
+];
+---
+
+<section
+	id="metodologia-section"
+	aria-labelledby="metodologia-title"
+	class="bg-background"
+>
+	<div class="mx-auto w-full max-w-7xl px-10 py-16 lg:py-24">
+		<header class="flex flex-col items-center border-b border-primary/15 pb-6 text-center">
+			<h2 id="metodologia-title" class="text-5xl font-bold text-primary">
+				¿Cómo trabajamos?
+			</h2>
+			<p class="mt-5 max-w-3xl text-lg/7 tracking-[.2em] text-primary/70">
+				Un proceso claro y colaborativo que acompaña cada proyecto desde la idea
+				hasta su ejecución.
+			</p>
+		</header>
+
+		<div class="grid gap-x-16 gap-y-12 lg:grid-cols-2">
+			<div class="lg:hidden">
+				<div class="relative aspect-[4/5] w-full overflow-hidden rounded-[2.5rem]">
+					<img
+						src={methodologyImage.src}
+						width={methodologyImage.width}
+						height={methodologyImage.height}
+						alt={methodologyAlt}
+						loading="lazy"
+						decoding="async"
+						class="absolute inset-0 h-full w-full object-cover"
+					/>
+				</div>
+			</div>
+
+			<ol
+				data-methodology-steps
+				class="relative space-y-32 lg:order-1 lg:space-y-0"
+			>
+				<span
+					aria-hidden="true"
+					class="absolute top-7 bottom-7 left-7 w-px bg-primary/15 sm:left-8 lg:top-[19vh] lg:bottom-[19vh]"
+				></span>
+				<span
+					aria-hidden="true"
+					data-methodology-progress
+					class="absolute top-7 bottom-7 left-7 w-px origin-top scale-y-0 bg-primary/60 sm:left-8 lg:top-[19vh] lg:bottom-[19vh]"
+				></span>
+				{steps.map((step, index) => (
+					<li
+						data-methodology-step={index}
+						class="relative flex items-start gap-6 sm:gap-8 lg:min-h-[38vh] lg:items-center"
+					>
+						<span
+							aria-hidden="true"
+							data-methodology-node={index}
+							class="relative z-10 flex size-14 shrink-0 items-center justify-center rounded-full border border-primary/25 bg-background sm:size-16"
+						>
+							<span
+								data-methodology-dot={index}
+								class="size-4 rounded-full bg-primary/25"
+							></span>
+						</span>
+						<div class="min-w-0">
+							<p class="text-xs tracking-[.3em] text-primary/60">
+								{step.number}
+							</p>
+							<h3 class="mt-2 text-3xl font-semibold uppercase sm:text-4xl">
+								{step.title}
+							</h3>
+							<p class="mt-3 max-w-[38ch] text-lg/7 tracking-[.12em] text-primary/70">
+								{step.description}
+							</p>
+						</div>
+					</li>
+				))}
+			</ol>
+
+			<div class="hidden lg:order-2 lg:block">
+				<div class="sticky top-0 flex h-dvh items-center">
+					<div class="relative h-[78vh] w-full overflow-hidden rounded-[4rem]">
+						<img
+							src={methodologyImage.src}
+							width={methodologyImage.width}
+							height={methodologyImage.height}
+							alt={methodologyAlt}
+							loading="lazy"
+							decoding="async"
+							class="absolute inset-0 h-full w-full object-cover"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	type CleanupWindow = Window & { __metodologiaCleanup?: () => void };
+
+	const win = window as CleanupWindow;
+	const section = document.querySelector<HTMLElement>('#metodologia-section');
+
+	if (section) {
+		win.__metodologiaCleanup?.();
+
+		const list = section.querySelector<HTMLElement>('[data-methodology-steps]');
+		const steps = Array.from(
+			section.querySelectorAll<HTMLElement>('[data-methodology-step]'),
+		);
+		const nodes = Array.from(
+			section.querySelectorAll<HTMLElement>('[data-methodology-node]'),
+		);
+		const dots = Array.from(
+			section.querySelectorAll<HTMLElement>('[data-methodology-dot]'),
+		);
+		const progress = section.querySelector<HTMLElement>(
+			'[data-methodology-progress]',
+		);
+
+		let activeStep = -1;
+		let teardown: (() => void) | undefined;
+
+		const ACTIVE_BORDER = 'rgba(69, 58, 45, 0.85)';
+		const INACTIVE_BORDER = 'rgba(69, 58, 45, 0.25)';
+		const ACTIVE_DOT = 'rgba(69, 58, 45, 0.9)';
+		const INACTIVE_DOT = 'rgba(69, 58, 45, 0.25)';
+
+		function setActiveStep(index: number, animate: boolean) {
+			if (index === activeStep || !steps[index]) return;
+			activeStep = index;
+			const duration = animate ? 0.45 : 0;
+
+			steps.forEach((step, i) => {
+				const isActive = i === index;
+				if (isActive) {
+					step.setAttribute('aria-current', 'step');
+				} else {
+					step.removeAttribute('aria-current');
+				}
+
+				if (nodes[i]) {
+					gsap.to(nodes[i], {
+						borderColor: isActive ? ACTIVE_BORDER : INACTIVE_BORDER,
+						scale: isActive ? 1 : 0.96,
+						duration,
+						ease: 'power2.out',
+						overwrite: 'auto',
+					});
+				}
+
+				if (dots[i]) {
+					gsap.to(dots[i], {
+						backgroundColor: isActive ? ACTIVE_DOT : INACTIVE_DOT,
+						scale: isActive ? 1 : 0.45,
+						duration,
+						ease: 'power2.out',
+						overwrite: 'auto',
+					});
+				}
+			});
+		}
+
+		function showAllSteps() {
+			activeStep = -1;
+			gsap.set(steps, { opacity: 1, x: 0 });
+			gsap.set(nodes, { borderColor: ACTIVE_BORDER, scale: 1 });
+			gsap.set(dots, { backgroundColor: ACTIVE_DOT, scale: 1 });
+			if (progress) gsap.set(progress, { scaleY: 1 });
+			steps.forEach((step) => step.removeAttribute('aria-current'));
+		}
+
+		const ctx = gsap.context(() => {
+			const mm = gsap.matchMedia();
+
+			mm.add(
+				{
+					desktop:
+						'(min-width: 1024px) and (prefers-reduced-motion: no-preference)',
+					desktopReduce:
+						'(min-width: 1024px) and (prefers-reduced-motion: reduce)',
+					mobile:
+						'(max-width: 1023px) and (prefers-reduced-motion: no-preference)',
+					mobileReduce:
+						'(max-width: 1023px) and (prefers-reduced-motion: reduce)',
+				},
+				(mmCtx) => {
+					const conditions = mmCtx.conditions as Record<string, boolean>;
+					const isDesktop = Boolean(conditions.desktop);
+					const animate = isDesktop || Boolean(conditions.mobile);
+
+					if (!animate) {
+						showAllSteps();
+						return;
+					}
+
+					steps.forEach((step, i) => {
+						gsap.fromTo(
+							step,
+							{ opacity: 0, x: isDesktop ? -72 : -32 },
+							{
+								opacity: 1,
+								x: 0,
+								duration: 0.9,
+								ease: 'power3.out',
+								scrollTrigger: {
+									trigger: step,
+									start: 'top 60%',
+								},
+							},
+						);
+
+						ScrollTrigger.create({
+							trigger: step,
+							start: 'top center',
+							end: 'bottom center',
+							onEnter: () => setActiveStep(i, true),
+							onEnterBack: () => setActiveStep(i, true),
+						});
+					});
+
+					if (list && progress) {
+						gsap.fromTo(
+							progress,
+							{ scaleY: 0 },
+							{
+								scaleY: 1,
+								ease: 'none',
+								scrollTrigger: {
+									trigger: list,
+									start: 'top center',
+									end: 'bottom center',
+									scrub: true,
+								},
+							},
+						);
+
+						ScrollTrigger.create({
+							trigger: list,
+							start: 'top center',
+							end: 'bottom top',
+							onLeaveBack: () => setActiveStep(0, true),
+						});
+					}
+				},
+			);
+
+			teardown = () => {
+				mm.revert();
+			};
+		});
+
+		win.__metodologiaCleanup = () => {
+			teardown?.();
+			ctx.revert();
+			win.__metodologiaCleanup = undefined;
+		};
+	}
+</script>
