@@ -1,0 +1,616 @@
+---
+import servicio1 from '@/assets/servicios/servicio1.png';
+import servicio2 from '@/assets/servicios/servicio2.jpg';
+import servicio3 from '@/assets/servicios/servicio3.jpg';
+import servicio4 from '@/assets/servicios/servicio4.jpg';
+
+interface ServiceImage {
+	src: string;
+	width: number;
+	height: number;
+}
+
+interface Service {
+	title: string;
+	description: string;
+	image: ServiceImage;
+	alt: string;
+}
+
+const services: Service[] = [
+	{
+		title: 'Diseño Residencial',
+		description:
+			'Espacios que reflejan tu estilo, necesidades y forma de vivir.',
+		image: servicio1,
+		alt: 'Diseño Residencial',
+	},
+	{
+		title: 'Diseño Inmobiliario',
+		description:
+			'Desarrollo de pilotos, salas de ventas y áreas comunes con identidad.',
+		image: servicio2,
+		alt: 'Diseño Inmobiliario',
+	},
+	{
+		title: 'Ejecución e Implementación',
+		description:
+			'Del concepto a la realidad, cuidando cada decisión del diseño.',
+		image: servicio3,
+		alt: 'Ejecución e Implementación',
+	},
+	{
+		title: 'Styling',
+		description:
+			'Selección de mobiliario y decoración para potenciar la identidad del espacio.',
+		image: servicio4,
+		alt: 'Styling',
+	},
+];
+---
+
+<section id="servicios-section" class="bg-background">
+	<div class="mx-auto w-full max-w-7xl px-10 py-16 lg:py-24">
+		<header class="mb-10 flex flex-col items-center border-b border-primary/15 pb-5 gap-5 lg:mb-20">
+			<h2 id="servicios-title" class="text-5xl font-bold text-white">
+				¿Qué servicios ofrezco?
+			</h2>
+			<span class="text-lg/5 text-center tracking-[.25em] text-primary/50">
+				Acompañamos cada proyecto desde la idea hasta los últimos detalles para
+				crear espacios con identidad.
+			</span>
+		</header>
+
+		<div class="grid gap-x-16 lg:grid-cols-2">
+			<div class="hidden lg:block">
+				<div class="sticky top-0 flex h-dvh items-center">
+					<div class="relative h-[78vh] w-full overflow-hidden">
+						{services.map((service, index) => (
+							<img
+								src={service.image.src}
+								width={service.image.width}
+								height={service.image.height}
+								alt={service.alt}
+								loading={index === 0 ? 'eager' : 'lazy'}
+								decoding="async"
+								data-desktop-img={index}
+								style={index === 0 ? undefined : 'clip-path: inset(0 0 100% 0)'}
+								class="absolute inset-0 h-full w-full object-cover"
+							/>
+						))}
+					</div>
+				</div>
+			</div>
+
+			<ol data-services class="border-t border-primary/15 pb-80 lg:border-t-0">
+				{services.map((service, index) => (
+					<li data-service={index} class="border-b border-primary/15">
+						<h3 class="font-normal">
+							<button
+								type="button"
+								id={`servicio-btn-${index}`}
+								aria-controls={`servicio-panel-${index}`}
+								aria-expanded={index === 0 ? 'true' : 'false'}
+								data-service-button={index}
+								class="w-full cursor-pointer py-7 text-left focus-visible:ring-1 focus-visible:ring-primary/40 focus-visible:ring-offset-4 focus-visible:ring-offset-background focus-visible:outline-none lg:flex lg:min-h-[34vh] lg:flex-col lg:justify-center lg:py-14"
+							>
+								<span class="mt-3 flex items-center justify-between gap-6 lg:mt-5">
+									<span class="text-[clamp(1.75rem,3vw,3.25rem)] leading-[0.95] font-semibold uppercase">
+										{service.title}
+									</span>
+									<span
+										class="hidden shrink-0 opacity-0 lg:block"
+										aria-hidden="true"
+										data-arrow={index}
+									>
+										<svg width="40" height="12" viewBox="0 0 40 12" fill="none">
+											<path
+												d="M0 6h38M33 1l5 5-5 5"
+												stroke="currentColor"
+												stroke-width="1.25"
+											/>
+										</svg>
+									</span>
+									<span
+										class="relative block size-3 shrink-0 lg:hidden"
+										aria-hidden="true"
+										data-icon={index}
+									>
+										<span class="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-current" />
+										<span
+											class="absolute top-0 left-1/2 h-full w-px -translate-x-1/2 bg-current"
+											data-icon-bar={index}
+										/>
+									</span>
+								</span>
+							</button>
+						</h3>
+						<div
+							id={`servicio-panel-${index}`}
+							role="region"
+							aria-labelledby={`servicio-btn-${index}`}
+							data-panel={index}
+							class="overflow-hidden"
+						>
+							<div class="pb-8 lg:min-h-[5rem] lg:pb-16">
+								<div
+									class="mb-6 aspect-[4/3] overflow-hidden lg:hidden"
+									data-mobile-media={index}
+								>
+									<img
+										src={service.image.src}
+										width={service.image.width}
+										height={service.image.height}
+										alt={service.alt}
+										loading={index === 0 ? 'eager' : 'lazy'}
+										decoding="async"
+										data-mobile-img={index}
+										class="h-full w-full object-cover"
+									/>
+								</div>
+								<p
+									data-desc={index}
+									class="max-w-[34ch] text-lg/5 tracking-[.25em] text-primary/70"
+								>
+									{service.description}
+								</p>
+							</div>
+						</div>
+					</li>
+				))}
+			</ol>
+		</div>
+	</div>
+</section>
+
+<script>
+	import { gsap } from 'gsap';
+	import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+	type CleanupWindow = Window & { __servicesCleanup?: () => void };
+
+	const win = window as CleanupWindow;
+	const section = document.querySelector<HTMLElement>('#servicios-section');
+
+	if (section) {
+		win.__servicesCleanup?.();
+
+		const items = Array.from(
+			section.querySelectorAll<HTMLElement>('[data-service]'),
+		);
+		const buttons = Array.from(
+			section.querySelectorAll<HTMLButtonElement>('[data-service-button]'),
+		);
+		const panels = Array.from(
+			section.querySelectorAll<HTMLElement>('[data-panel]'),
+		);
+		const descs = Array.from(
+			section.querySelectorAll<HTMLElement>('[data-desc]'),
+		);
+		const arrows = Array.from(
+			section.querySelectorAll<HTMLElement>('[data-arrow]'),
+		);
+		const iconBars = Array.from(
+			section.querySelectorAll<HTMLElement>('[data-icon-bar]'),
+		);
+		const desktopImgs = Array.from(
+			section.querySelectorAll<HTMLImageElement>('[data-desktop-img]'),
+		);
+		const mobileImgs = Array.from(
+			section.querySelectorAll<HTMLImageElement>('[data-mobile-img]'),
+		);
+		const list = section.querySelector<HTMLElement>('[data-services]');
+		const title = section.querySelector<HTMLElement>('#servicios-title');
+
+		let activeIndex = 0;
+		let openIndex = 0;
+		let desktopImgIndex = 0;
+		let imageTween: gsap.core.Timeline | undefined;
+		let programmaticScroll = false;
+		let scrollToken = 0;
+		let teardown: (() => void) | undefined;
+
+		const prefersReduced = () =>
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const isDesktop = () => window.matchMedia('(min-width: 1024px)').matches;
+
+		function getVisibleDesktopImageIndex() {
+			for (let i = 0; i < desktopImgs.length; i += 1) {
+				if (window.getComputedStyle(desktopImgs[i]).zIndex === '2') {
+					return i;
+				}
+			}
+			return desktopImgIndex;
+		}
+
+		function normalizeDesktopLayers(currentIndex: number) {
+			imageTween?.kill();
+			desktopImgs.forEach((image, i) => {
+				if (i === currentIndex) {
+					gsap.set(image, {
+						zIndex: 2,
+						clipPath: 'inset(0 0 0% 0)',
+						scale: 1,
+						opacity: 1,
+					});
+				} else {
+					gsap.set(image, {
+						zIndex: 1,
+						clipPath: 'inset(0 0 100% 0)',
+						scale: 1,
+						opacity: 1,
+					});
+				}
+			});
+			desktopImgIndex = currentIndex;
+		}
+
+		function revealDesktopImage(index: number, animate: boolean) {
+			imageTween?.kill();
+			const sourceIndex = getVisibleDesktopImageIndex();
+			const source = desktopImgs[sourceIndex];
+			const target = desktopImgs[index];
+
+			if (!source || !target) {
+				desktopImgIndex = index;
+				return;
+			}
+
+			desktopImgIndex = index;
+			desktopImgs.forEach((image, i) => {
+				if (i !== sourceIndex && i !== index) {
+					gsap.set(image, {
+						zIndex: 1,
+						clipPath: 'inset(0 0 100% 0)',
+						scale: 1,
+						opacity: 1,
+					});
+				}
+			});
+			gsap.set(source, { zIndex: 2 });
+			gsap.set(target, {
+				zIndex: 3,
+				clipPath: 'inset(0 0 100% 0)',
+				scale: 1.03,
+				opacity: 0.5,
+			});
+
+			if (!animate || index === sourceIndex) {
+				normalizeDesktopLayers(index);
+				return;
+			}
+
+			imageTween = gsap
+				.timeline()
+				.to(
+					target,
+					{
+						clipPath: 'inset(0 0 0% 0)',
+						scale: 1,
+						opacity: 1,
+						duration: 1.2,
+						ease: 'power3.inOut',
+					},
+					0,
+				)
+				.to(source, { scale: 1.04, duration: 1.2, ease: 'power3.inOut' }, 0)
+				.add(() => normalizeDesktopLayers(index));
+		}
+
+		function setActive(index: number, animate: boolean) {
+			if (index === activeIndex) return;
+			activeIndex = index;
+
+			items.forEach((item, i) => {
+				const on = i === index;
+				const duration = animate ? 0.6 : 0;
+				gsap.to(item, {
+					opacity: on ? 1 : 0.35,
+					duration,
+					ease: 'power2.out',
+					overwrite: 'auto',
+				});
+				if (descs[i]) {
+					gsap.to(descs[i], {
+						opacity: on ? 1 : 0,
+						y: on ? 0 : 12,
+						duration,
+						ease: 'power2.out',
+						overwrite: 'auto',
+					});
+				}
+				if (arrows[i]) {
+					gsap.to(arrows[i], {
+						opacity: on ? 1 : 0,
+						x: on ? 0 : -12,
+						duration,
+						ease: 'power2.out',
+						overwrite: 'auto',
+					});
+				}
+				buttons[i]?.setAttribute('aria-expanded', String(on));
+			});
+
+			revealDesktopImage(index, animate);
+		}
+
+		function initDesktop() {
+			activeIndex = 0;
+			desktopImgIndex = 0;
+			panels.forEach((panel) => {
+				panel.style.height = '';
+			});
+			items.forEach((item, i) => {
+				gsap.set(item, { opacity: i === 0 ? 1 : 0.35 });
+				gsap.set(descs[i], {
+					opacity: i === 0 ? 1 : 0,
+					y: i === 0 ? 0 : 12,
+				});
+				gsap.set(arrows[i], { opacity: i === 0 ? 1 : 0, x: i === 0 ? 0 : -12 });
+				gsap.set(desktopImgs[i], {
+					zIndex: i === 0 ? 2 : 1,
+					clipPath: i === 0 ? 'inset(0 0 0% 0)' : 'inset(0 0 100% 0)',
+					scale: 1,
+					opacity: 1,
+				});
+				buttons[i]?.setAttribute('aria-expanded', String(i === 0));
+				if (iconBars[i]) gsap.set(iconBars[i], { clearProps: 'scaleY' });
+			});
+		}
+
+		function initMobile() {
+			openIndex = 0;
+			items.forEach((item, i) => {
+				gsap.set(item, { clearProps: 'opacity' });
+				gsap.set(descs[i], { clearProps: 'all' });
+				gsap.set(arrows[i], { clearProps: 'all' });
+				gsap.set(desktopImgs[i], { clearProps: 'all' });
+			});
+			panels.forEach((panel, i) => {
+				const open = i === 0;
+				buttons[i]?.setAttribute('aria-expanded', String(open));
+				if (iconBars[i]) gsap.set(iconBars[i], { scaleY: open ? 0 : 1 });
+				gsap.set(panel, { height: open ? 'auto' : 0 });
+				if (mobileImgs[i]) {
+					gsap.set(mobileImgs[i], {
+						clipPath: open ? 'inset(0 0 0% 0)' : 'inset(0 0 100% 0)',
+						scale: 1,
+						opacity: 1,
+					});
+				}
+			});
+		}
+
+		function setExpanded(index: number, expanded: boolean, animate: boolean) {
+			const panel = panels[index];
+			const bar = iconBars[index];
+			const img = mobileImgs[index];
+
+			buttons[index]?.setAttribute('aria-expanded', String(expanded));
+			if (bar) {
+				gsap.to(bar, {
+					scaleY: expanded ? 0 : 1,
+					duration: animate ? 0.4 : 0,
+					ease: 'power2.inOut',
+					overwrite: 'auto',
+				});
+			}
+			if (!panel) return;
+
+			if (expanded) {
+				panel.style.height = 'auto';
+				const target = panel.offsetHeight;
+				if (!animate) {
+					gsap.set(panel, { height: 'auto' });
+					if (img)
+						gsap.set(img, {
+							clipPath: 'inset(0 0 0% 0)',
+							scale: 1,
+							opacity: 1,
+						});
+					return;
+				}
+				gsap.set(panel, { height: 0 });
+				gsap.to(panel, {
+					height: target,
+					duration: 0.7,
+					ease: 'power3.inOut',
+					overwrite: 'auto',
+					onComplete: () => {
+						panel.style.height = 'auto';
+					},
+				});
+				if (img) {
+					gsap.fromTo(
+						img,
+						{ clipPath: 'inset(0 0 100% 0)', scale: 1.05, opacity: 0 },
+						{
+							clipPath: 'inset(0 0 0% 0)',
+							scale: 1,
+							opacity: 1,
+							duration: 0.9,
+							ease: 'power3.out',
+							delay: 0.05,
+							overwrite: 'auto',
+						},
+					);
+				}
+			} else {
+				if (!animate) {
+					gsap.set(panel, { height: 0 });
+					if (img) gsap.set(img, { clipPath: 'inset(0 0 100% 0)' });
+					return;
+				}
+				gsap.set(panel, { height: panel.offsetHeight });
+				gsap.to(panel, {
+					height: 0,
+					duration: 0.55,
+					ease: 'power3.inOut',
+					overwrite: 'auto',
+				});
+				if (img) {
+					gsap.fromTo(
+						img,
+						{ clipPath: 'inset(0 0 0% 0)' },
+						{
+							clipPath: 'inset(0 0 100% 0)',
+							duration: 0.55,
+							ease: 'power3.inOut',
+							overwrite: 'auto',
+						},
+					);
+				}
+			}
+		}
+
+		function toggleMobile(index: number, animate: boolean) {
+			const isOpen = index === openIndex;
+			if (isOpen) {
+				setExpanded(index, false, animate);
+				openIndex = -1;
+				return;
+			}
+			if (openIndex >= 0) setExpanded(openIndex, false, animate);
+			setExpanded(index, true, animate);
+			openIndex = index;
+		}
+
+		function scrollToService(index: number, animate: boolean) {
+			const item = items[index];
+			if (!item) return;
+			const y =
+				item.getBoundingClientRect().top +
+				window.scrollY +
+				item.offsetHeight / 2 -
+				window.innerHeight / 2;
+
+			if (!animate) {
+				window.scrollTo({ top: y, behavior: 'auto' });
+				return;
+			}
+
+			const token = ++scrollToken;
+			programmaticScroll = true;
+			gsap.to(window, {
+				duration: 1.1,
+				ease: 'power2.inOut',
+				overwrite: true,
+				scrollTo: { y, autoKill: true },
+				onComplete: () => {
+					if (token !== scrollToken) return;
+					programmaticScroll = false;
+					setActive(index, true);
+				},
+				onInterrupt: () => {
+					if (token !== scrollToken) return;
+					programmaticScroll = false;
+					setActive(index, true);
+				},
+			});
+		}
+
+		function handleActivate(index: number) {
+			const animate = !prefersReduced();
+			if (isDesktop()) {
+				if (index !== activeIndex) setActive(index, animate);
+				scrollToService(index, animate);
+			} else {
+				toggleMobile(index, animate);
+			}
+		}
+
+		const onClick = (event: Event) => {
+			const target = (event.target as HTMLElement | null)?.closest<HTMLElement>(
+				'[data-service-button]',
+			);
+			if (!target || !section.contains(target)) return;
+			const index = Number(target.dataset.serviceButton);
+			if (Number.isNaN(index)) return;
+			handleActivate(index);
+		};
+
+		const ctx = gsap.context(() => {
+			const mm = gsap.matchMedia();
+
+			mm.add(
+				{
+					desktop:
+						'(min-width: 1024px) and (prefers-reduced-motion: no-preference)',
+					desktopReduce:
+						'(min-width: 1024px) and (prefers-reduced-motion: reduce)',
+					mobile:
+						'(max-width: 1023px) and (prefers-reduced-motion: no-preference)',
+					mobileReduce:
+						'(max-width: 1023px) and (prefers-reduced-motion: reduce)',
+				},
+				(mmCtx) => {
+					const conditions = mmCtx.conditions as Record<string, boolean>;
+
+					if (conditions.desktop || conditions.desktopReduce) {
+						const animate = Boolean(conditions.desktop);
+						initDesktop();
+
+						items.forEach((item, i) => {
+							ScrollTrigger.create({
+								trigger: item,
+								start: 'top center',
+								end: 'bottom center',
+								onEnter: () => {
+									if (!programmaticScroll) setActive(i, animate);
+								},
+								onEnterBack: () => {
+									if (!programmaticScroll) setActive(i, animate);
+								},
+							});
+						});
+
+						if (list) {
+							ScrollTrigger.create({
+								trigger: list,
+								start: 'top center',
+								end: 'bottom top',
+								onLeaveBack: () => {
+									if (!programmaticScroll) setActive(0, animate);
+								},
+							});
+						}
+
+						if (animate && title) {
+							gsap.from(title, {
+								opacity: 0,
+								y: 24,
+								duration: 1,
+								ease: 'power3.out',
+								scrollTrigger: {
+									trigger: section,
+									start: 'top 85%',
+								},
+							});
+						}
+					} else {
+						initMobile();
+					}
+				},
+			);
+
+			section.addEventListener('click', onClick);
+			teardown = () => {
+				section.removeEventListener('click', onClick);
+				mm.revert();
+			};
+		});
+
+		win.__servicesCleanup = () => {
+			imageTween?.kill();
+			gsap.getTweensOf(window).forEach((tween) => {
+				if (tween.vars?.scrollTo) tween.kill();
+			});
+			teardown?.();
+			ctx.revert();
+			win.__servicesCleanup = undefined;
+		};
+	}
+</script>
