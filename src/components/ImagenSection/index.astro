@@ -2,33 +2,39 @@
 const { img, alt } = Astro.props;
 ---
 
-<section id="imagen-section" class="w-full">
-	<div class="w-full overflow-hidden h-190 flex items-center justify-center">
+<section data-imagen-section class="w-full">
+	<div class="flex h-190 w-full items-center justify-center overflow-hidden">
 		<img src={img} alt={alt} class="w-full translate-y-[-3%]" />
 	</div>
 </section>
 
 <script>
 	import { gsap } from 'gsap';
-
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 	gsap.registerPlugin(ScrollTrigger);
 
-	const imagenSection = document.querySelector('#imagen-section');
-
-	gsap.fromTo(
-		imagenSection,
-		{ filter: 'blur(10px)', opacity: 0.2 },
-		{
-			filter: 'blur(0px)',
-			opacity: 1,
-			duration: 2,
-			ease: 'power2.out',
-			scrollTrigger: {
-				trigger: imagenSection,
-				start: 'top 80%',
-			},
-		},
+	const sections = document.querySelectorAll<HTMLElement>(
+		'[data-imagen-section]',
 	);
+
+	sections.forEach((section) => {
+		gsap.fromTo(
+			section,
+			{
+				filter: 'blur(10px)',
+				opacity: 0.2,
+			},
+			{
+				filter: 'blur(0px)',
+				opacity: 1,
+				duration: 2,
+				ease: 'power2.out',
+				scrollTrigger: {
+					trigger: section,
+					start: 'top 80%',
+				},
+			},
+		);
+	});
 </script>
