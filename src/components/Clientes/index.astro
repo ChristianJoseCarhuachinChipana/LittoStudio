@@ -1,0 +1,143 @@
+---
+import urbanaLogo from '@/assets/clientes/cliente1.png';
+import abrilLogo from '@/assets/clientes/cliente2.png';
+import arkonteLogo from '@/assets/clientes/cliente3.png';
+import checorLogo from '@/assets/clientes/cliente4.png';
+import edsaLogo from '@/assets/clientes/cliente5.png';
+import torattoLogo from '@/assets/clientes/cliente6.png';
+
+interface ClientLogoImage {
+	src: string;
+	width: number;
+	height: number;
+}
+
+interface Client {
+	name: string;
+	image: ClientLogoImage;
+	alt: string;
+}
+
+const clients: Client[] = [
+	{
+		name: 'Urbana Perú',
+		image: urbanaLogo,
+		alt: 'Urbana Perú',
+	},
+	{
+		name: 'Abril Grupo Inmobiliario',
+		image: abrilLogo,
+		alt: 'Abril Grupo Inmobiliario',
+	},
+	{
+		name: 'Arkonte Studio',
+		image: arkonteLogo,
+		alt: 'Arkonte Studio',
+	},
+	{
+		name: 'Checor Inmobiliaria',
+		image: checorLogo,
+		alt: 'Checor Inmobiliaria',
+	},
+	{
+		name: 'Grupo EDSA',
+		image: edsaLogo,
+		alt: 'Grupo EDSA',
+	},
+	{
+		name: 'Toratto Grupo Inmobiliario',
+		image: torattoLogo,
+		alt: 'Toratto Grupo Inmobiliario',
+	},
+];
+
+const clientSequences = [clients, clients, clients, clients];
+---
+
+<section
+	id="clientes-section"
+	aria-labelledby="clientes-title"
+	class="bg-white"
+>
+	<div class="mx-auto w-full max-w-7xl px-10 pt-16 text-center lg:pt-24">
+		<h2 id="clientes-title" class="text-5xl font-bold text-primary">
+			Han confiado en nosotros
+		</h2>
+		<p class="mt-4 text-lg/5 tracking-[.25em] text-textColor">
+			+ 25 Proyectos entregados
+		</p>
+	</div>
+
+	<div class="mx-auto w-full max-w-7xl px-10 py-12 lg:py-16">
+		<div
+			class="clientes-marquee overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary/40"
+			role="region"
+			aria-label="Logotipos de clientes en movimiento automático"
+			tabindex="0"
+		>
+			<div class="clientes-track">
+				{clientSequences.map((sequence, sequenceIndex) => (
+					<ul
+						aria-hidden={sequenceIndex === 0 ? undefined : 'true'}
+						class="flex shrink-0 items-center divide-x divide-primary/20 border-r border-primary/20"
+					>
+						{sequence.map((client) => (
+							<li class="flex shrink-0 items-center px-6 sm:px-10 lg:px-12">
+								<img
+									src={client.image.src}
+									width={client.image.width}
+									height={client.image.height}
+									alt={client.alt}
+									loading="lazy"
+									decoding="async"
+									class="h-10 w-auto object-contain sm:h-12 lg:h-16"
+								/>
+							</li>
+						))}
+					</ul>
+				))}
+			</div>
+		</div>
+	</div>
+
+	<p class="mx-auto max-w-3xl px-10 pb-16 text-center text-lg/5 tracking-[.25em] text-textColor lg:pb-24">
+		Colaborando en proyectos residenciales e inmobiliarios que generan valor e
+		identidad.
+	</p>
+</section>
+
+<style>
+	.clientes-track {
+		display: flex;
+		width: max-content;
+		animation: clientes-marquee 45s linear infinite;
+		will-change: transform;
+	}
+
+	.clientes-marquee:hover .clientes-track,
+	.clientes-marquee:focus-within .clientes-track {
+		animation-play-state: paused;
+	}
+
+	@keyframes clientes-marquee {
+		from {
+			transform: translateX(0);
+		}
+
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.clientes-track {
+			animation: none;
+			transform: none;
+		}
+
+		.clientes-marquee {
+			overflow-x: auto;
+			scrollbar-width: thin;
+		}
+	}
+</style>
