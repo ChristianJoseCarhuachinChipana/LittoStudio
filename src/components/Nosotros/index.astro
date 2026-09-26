@@ -6,11 +6,13 @@ import NosotrosImg from '@/assets/nosotros.png';
 	id="nosotros-section"
 	class="bg-background flex items-center justify-center"
 >
-	<div class="max-w-7xl w-full flex py-14 px-10">
-		<div class="w-9/19 pr-[10%] flex items-center">
+	<div class="flex w-full max-w-7xl flex-col gap-10 px-6 py-14 sm:gap-12 sm:px-10 lg:flex-row lg:gap-0 lg:py-14">
+		<div class="flex w-full items-center lg:w-9/19 lg:pr-[10%]">
 			<div id="nosotros-text">
-				<h2 class="text-5xl font-bold text-white mb-10">Nuestra esencia</h2>
-				<div class="text-lg/5 tracking-[.25em]">
+				<h2 class="mb-6 text-4xl font-bold text-white sm:text-5xl lg:mb-10">
+					Nuestra esencia
+				</h2>
+				<div class="text-base/7 tracking-[.15em] sm:text-lg/8 sm:tracking-[.2em] lg:text-lg/5 lg:tracking-[.25em]">
 					<p>
 						Creemos en el diseño como una herramienta para crear espacios con
 						identidad, carácter y significado.
@@ -26,12 +28,17 @@ import NosotrosImg from '@/assets/nosotros.png';
 				</div>
 			</div>
 		</div>
-		<div id="nosotros-image" class="w-10/19">
-			<div class="rounded-[15%] overflow-hidden aspect-32/33">
+		<div
+			id="nosotros-image"
+			class="w-full sm:mx-auto sm:max-w-2xl lg:mx-0 lg:w-10/19 lg:max-w-none"
+		>
+			<div class="relative aspect-[3/4] overflow-hidden rounded-[2rem] sm:aspect-[16/10] sm:rounded-[3rem] lg:aspect-32/33 lg:rounded-[15%]">
 				<img
 					src={NosotrosImg.src}
 					alt="Nosotros"
-					class="w-full translate-y-[-10%]"
+					loading="lazy"
+					decoding="async"
+					class="absolute inset-0 h-full w-full translate-y-[-10%] object-cover lg:static lg:h-auto lg:w-full"
 				/>
 			</div>
 		</div>
