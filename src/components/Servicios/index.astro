@@ -82,7 +82,10 @@ const services: Service[] = [
 				</div>
 			</div>
 
-			<ol data-services class="border-t border-primary/15 pb-80 lg:border-t-0">
+			<ol
+				data-services
+				class="border-t border-primary/15 lg:pb-80 lg:border-t-0"
+			>
 				{services.map((service, index) => (
 					<li data-service={index} class="border-b border-primary/15">
 						<h3 class="font-normal">
