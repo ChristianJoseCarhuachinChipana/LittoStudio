@@ -1,0 +1,1 @@
+import{t as e}from"./gsap.CvDoa17S.js";import{t}from"./ScrollTrigger.CDDhF-DF.js";e.registerPlugin(t),document.querySelectorAll(`[data-imagen-section]`).forEach(t=>{e.fromTo(t,{filter:`blur(10px)`,opacity:.2},{filter:`blur(0px)`,opacity:1,duration:2,ease:`power2.out`,scrollTrigger:{trigger:t,start:`top 80%`}})});
