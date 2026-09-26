@@ -5,6 +5,8 @@ import Footer from '@/components/Footer/index.astro';
 import Nosotros from '@/components/Nosotros/index.astro';
 import Proyectos from '@/components/Proyectos/index.astro';
 import ImagenSection from '@/components/ImagenSection/index.astro';
+import imgSection1 from '@/assets/imgSection/img_section1.png';
+import imgSection2 from '@/assets/imgSection/img_section2.png';
 import Layout from '@/layouts/Layout.astro';
 import Metodologia from '@/components/Metodologia/index.astro';
 import Servicios from '@/components/Servicios/index.astro';
@@ -18,16 +20,10 @@ import '@/styles/global.css';
 	<Bienvenida />
 	<Nosotros />
 	<Proyectos />
-	<ImagenSection
-		img="src/assets/imgSection/img_section1.png"
-		alt="Proyecto 1"
-	/>
+	<ImagenSection img={imgSection1.src} alt="Proyecto 1" />
 	<Servicios />
 	<Clientes />
 	<Metodologia />
-	<ImagenSection
-		img="src/assets/imgSection/img_section2.png"
-		alt="Proyecto 2"
-	/>
+	<ImagenSection img={imgSection2.src} alt="Proyecto 2" />
 	<Footer />
 </Layout>

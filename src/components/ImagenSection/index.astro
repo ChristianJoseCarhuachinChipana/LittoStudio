@@ -3,8 +3,14 @@ const { img, alt } = Astro.props;
 ---
 
 <section data-imagen-section class="w-full">
-	<div class="flex h-190 w-full items-center justify-center overflow-hidden">
-		<img src={img} alt={alt} class="w-full translate-y-[-3%]" />
+	<div class="relative flex h-[32svh] min-h-[22rem] w-full items-center justify-center overflow-hidden sm:h-[36svh] sm:min-h-[26rem] lg:h-190 lg:min-h-0">
+		<img
+			src={img}
+			alt={alt}
+			loading="lazy"
+			decoding="async"
+			class="absolute inset-0 h-full w-full lg:translate-y-[-3%] object-cover lg:static lg:h-auto lg:w-full"
+		/>
 	</div>
 </section>
 
