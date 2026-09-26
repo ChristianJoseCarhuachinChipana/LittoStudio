@@ -53,6 +53,8 @@ import NosotrosImg from '@/assets/nosotros.png';
 
 	gsap.registerPlugin(ScrollTrigger, SplitText);
 
+	const mm = gsap.matchMedia();
+
 	const nosotrosSection = document.querySelector('#nosotros-section');
 	const nosotrosImg = document.querySelector('#nosotros-image');
 	const nosotrosImgHeight = nosotrosImg.getBoundingClientRect().height;
@@ -75,18 +77,37 @@ import NosotrosImg from '@/assets/nosotros.png';
 	const nosotrosText = document.querySelector('#nosotros-text');
 
 	const split = SplitText.create(nosotrosText, { type: 'words, lines' });
-	gsap.from(split.lines, {
-		x: '30%',
-		y: '30%',
-		opacity: 0,
-		duration: 0.7,
-		ease: 'power3.out',
-		stagger: 0.5,
-		scrollTrigger: {
-			trigger: nosotrosSection,
-			start: 'top center',
-			end: 'top top',
-			scrub: true,
-		},
+
+	mm.add('(min-width: 1025px)', () => {
+		gsap.from(split.lines, {
+			x: '30%',
+			y: '30%',
+			opacity: 0,
+			duration: 0.7,
+			ease: 'power3.out',
+			stagger: 0.5,
+			scrollTrigger: {
+				trigger: nosotrosSection,
+				start: 'top center',
+				end: 'top top',
+				scrub: true,
+			},
+		});
+	});
+
+	mm.add('(max-width: 1024px)', () => {
+		gsap.from(split.lines, {
+			y: '30%',
+			opacity: 0,
+			duration: 0.7,
+			ease: 'power3.out',
+			stagger: 0.5,
+			scrollTrigger: {
+				trigger: nosotrosSection,
+				start: 'top center',
+				end: 'top top',
+				scrub: true,
+			},
+		});
 	});
 </script>

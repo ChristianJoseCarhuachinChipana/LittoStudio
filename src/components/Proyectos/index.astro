@@ -70,7 +70,7 @@ const proyectosData = [
 			</div>
 			<div id="mask" class="absolute size-full bottom-0"></div>
 		</div>
-		<div class="order-1 w-full lg:order-2 lg:w-2/5 lg:pl-[6%] flex flex-col">
+		<div class="order-1 w-full lg:order-2 lg:w-2/5 xl:pl-[6%] flex flex-col">
 			<div class="lg:my-5">
 				<h2
 					id="proyectos-title"
@@ -107,6 +107,8 @@ const proyectosData = [
 
 	gsap.registerPlugin(ScrollTrigger);
 
+	const mm = gsap.matchMedia();
+
 	const proyectosSection = document.querySelector('#proyectos-section');
 	const mask = document.querySelector('#mask');
 	const bgLight = getComputedStyle(proyectosSection).backgroundColor;
@@ -133,41 +135,83 @@ const proyectosData = [
 	const proyectosTitle = document.querySelector('#proyectos-title');
 	const proyectosData = document.querySelector('#proyectos-data');
 
-	const tl = gsap.timeline({
-		scrollTrigger: {
-			trigger: proyectosSection,
-			start: 'top center',
-			end: 'bottom top',
-			scrub: false,
-		},
-	});
+	mm.add('(min-width: 1025px)', () => {
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: proyectosSection,
+				start: 'top center',
+				end: 'bottom top',
+				scrub: false,
+			},
+		});
 
-	tl.from(proyectosTitle, {
-		opacity: 0,
-		scale: 1.5,
-		duration: 3,
-		ease: 'power3.out',
-	});
-
-	tl.from(
-		proyectosText,
-		{
+		tl.from(proyectosTitle, {
 			opacity: 0,
-			x: '10%',
+			scale: 1.2,
 			duration: 3,
 			ease: 'power3.out',
-		},
-		'-=1.5',
-	);
+		});
 
-	tl.from(
-		proyectosData,
-		{
+		tl.from(
+			proyectosText,
+			{
+				opacity: 0,
+				x: '10%',
+				duration: 3,
+				ease: 'power3.out',
+			},
+			'-=1.5',
+		);
+
+		tl.from(
+			proyectosData,
+			{
+				opacity: 0,
+				scale: 0.5,
+				duration: 3,
+				ease: 'power3.out',
+			},
+			'-=2.5',
+		);
+	});
+
+	mm.add('(max-width: 1024px)', () => {
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: proyectosSection,
+				start: 'top center',
+				end: 'bottom top',
+				scrub: false,
+			},
+		});
+
+		tl.from(proyectosTitle, {
 			opacity: 0,
-			scale: 0.5,
+			scale: 0.8,
 			duration: 3,
 			ease: 'power3.out',
-		},
-		'-=2.5',
-	);
+		});
+
+		tl.from(
+			proyectosText,
+			{
+				opacity: 0,
+				y: '50%',
+				duration: 3,
+				ease: 'power3.out',
+			},
+			'-=1.5',
+		);
+
+		tl.from(
+			proyectosData,
+			{
+				opacity: 0,
+				scale: 0.5,
+				duration: 3,
+				ease: 'power3.out',
+			},
+			'-=2.5',
+		);
+	});
 </script>
